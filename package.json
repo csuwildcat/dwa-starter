@@ -43,5 +43,8 @@
     "trailingComma": "es5",
     "endOfLine": "crlf",
     "bracketSpacing": true
+  },
+  "engines": {
+    "node": "18.15.0"
   }
 }
