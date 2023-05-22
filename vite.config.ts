@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite';
-import nodePolyfills from 'vite-plugin-node-stdlib-browser'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
@@ -8,9 +10,28 @@ export default defineConfig({
   build: {
     sourcemap: true,
     assetsDir: "code",
-    target: [ "esnext", "edge100", "firefox100", "chrome100", "safari18" ],
+    rollupOptions: {
+      // for production
+      plugins: [nodePolyfills()],
+    }
+  },
+  resolve: {
+    alias: {
+      // by node-globals-polyfill
+      events: 'rollup-plugin-node-polyfills/polyfills/events',
+    }
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext',
+      define: {
+        global: 'globalThis',
+      }
+    }
   },
   plugins: [
+    NodeGlobalsPolyfillPlugin({ buffer: true, process: true }),
+    NodeModulesPolyfillPlugin(),
     VitePWA({
       strategies: "injectManifest",
       injectManifest: {
@@ -22,9 +43,8 @@ export default defineConfig({
         ],
       },
       devOptions: {
-        enabled: true,
-      },
-    }),
-    nodePolyfills(),
-  ],
-});
+        enabled: true
+      }
+    })
+  ]
+})
