@@ -3,7 +3,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement } from 'lit/decorators.js';
 
 import MarkdownStyles from  '../styles/markdown-docs.css';
-console.log(MarkdownStyles)
+
 @customElement('page-docs')
 export class PageDocs extends LitElement {
   static styles = [

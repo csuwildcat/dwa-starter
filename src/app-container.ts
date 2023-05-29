@@ -149,7 +149,10 @@ export class AppContainer extends LitElement {
     super();
 
     this.router = new AppRouter(this, {
-      onRouteChange: () => {
+      onRouteChange: (enteringRoute) => {
+        if (this.nav){
+          this.nav.selected = [...this.nav.children].indexOf(this.renderRoot.querySelector(`vaadin-tab a[href="${enteringRoute.path}"]`).parentNode)
+        }
         this.renderRoot.querySelector('#app_layout')?.__closeOverlayDrawer()
       },
       routes: [
@@ -173,6 +176,7 @@ export class AppContainer extends LitElement {
   }
 
   firstUpdated() {
+    this.nav = this.renderRoot.querySelector('#global_nav');
     DOM.skipFrame(() => this.router.goto(location.pathname));
   }
 
@@ -200,7 +204,7 @@ export class AppContainer extends LitElement {
 
         <h1 slot="navbar">DWA Starter</h1>
 
-        <vaadin-tabs slot="drawer" orientation="vertical">
+        <vaadin-tabs id="global_nav" slot="drawer" orientation="vertical">
           <vaadin-tab>
             <a tabindex="-1" href="/">
               <sl-icon name="house"></sl-icon>
