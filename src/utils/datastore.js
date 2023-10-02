@@ -20,8 +20,8 @@ class Datastore {
     })
   }
 
-  protocolUri = 'https://developer.tbd.website/protocols/blog';
-  postSchema = 'https://developer.tbd.website/protocols/5lides/post';
+  protocolUri = 'urn:example';
+  postSchema = 'urn:example/post';
 
   getProtocol(){
     return this.dwn.protocols.query({

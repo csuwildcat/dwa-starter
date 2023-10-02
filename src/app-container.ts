@@ -18,15 +18,14 @@ import './pages/settings';
 
 import { Web5 } from '@tbd54566975/web5';
 const { web5, did: userDID } = await Web5.connect();
-localStorage.userDID = JSON.stringify(userDID);
-
 console.log(userDID);
+globalThis.userDID = userDID
 
-// import { Datastore } from './utils/datastore.js';
-// const datastore = globalThis.datastore = new Datastore({
-//   web5: web5,
-//   did: userDID
-// })
+import { Datastore } from './utils/datastore.js';
+const datastore = globalThis.datastore = new Datastore({
+  web5: web5,
+  did: userDID
+})
 
 const BASE_URL: string = (import.meta.env.BASE_URL).length > 2 ? (import.meta.env.BASE_URL).slice(1, -1) : (import.meta.env.BASE_URL);
 
@@ -100,6 +99,16 @@ export class AppContainer extends LitElement {
         visibility: visible;
       }
 
+      h1 {
+        display: flex;
+        align-items: center;
+      }
+
+      h1 img {
+        height: 2em;
+        margin-right: 0.5em;
+      }
+
       /* main > *[state="active"] {
         overflow-y: scroll;
       } */
@@ -148,7 +157,7 @@ export class AppContainer extends LitElement {
   constructor() {
     super();
 
-    this.router = new AppRouter(this, {
+    this.router = globalThis.router = new AppRouter(this, {
       onRouteChange: (enteringRoute) => {
         if (this.nav){
           this.nav.selected = [...this.nav.children].indexOf(this.renderRoot.querySelector(`vaadin-tab a[href="${enteringRoute.path}"]`).parentNode)
